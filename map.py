@@ -25,3 +25,7 @@ class Map:
         
     def decouvre(self, x, y):
         self.map_decouverte = self.map   
+
+def draw(carte, screen):     
+    carte.decouvre(0,0)  
+    carte.draw_map(screen)

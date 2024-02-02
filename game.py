@@ -1,6 +1,6 @@
 # The main algorithm of the game goes here
 import pygame
-from map import Map
+from map import Map, draw
 from perso import Personnage, update_display
 import sys
 
@@ -39,7 +39,7 @@ class Game:
 
             perso = perso.make_move(carte.map, direction)
             screen.fill(couleur_fond)
-            carte.draw_map(screen)
+            draw(carte, screen)
             update_display(screen, 32, (255, 0, 0), perso)
             pygame.display.flip()
             pygame.time.Clock().tick(20)
