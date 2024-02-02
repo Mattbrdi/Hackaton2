@@ -13,6 +13,7 @@ class Map:
         
         self.map_decouverte = [[' ' for _ in range(len(row))] for row in self.map]
 
+
     def draw_map(self, screen):
         for i in range(len(self.map_decouverte)):
             for j in range(len(self.map_decouverte[i])):
@@ -30,11 +31,9 @@ class Map:
         self.map_decouverte = self.map   
     def cache(self, x, y):
         self.map_decouverte[x][y] = ' '
-carte = Map('map.txt')
 
-def draw(screen, carte):  
-    carte.update_map(0,0)  
-    carte.draw_map(screen)
+
+
     
 def point_with_caractere_next_to(carte, position, caractere):
     points = [] 
@@ -64,30 +63,13 @@ def point_a_devoiler(carte, position): #position en (ligne, colonne)
         point_a_devoiler.append((position[0]-1, position[1]))
         point_a_devoiler.append((position[0], position[1]+1))
         point_a_devoiler.append((position[0], position[1]-1))
-    return point_a_devoiler  
+    return point_a_devoiler
+  
 def update_map(carte, perso):
     position = perso.get_position()
     for point in point_a_devoiler(carte, position):
         carte.devoile(point[0], point[1])
+def draw(screen, carte):  
+    carte.update_map(carte, Personnage)  
+    carte.draw_map(screen)
 
-
-#-----------
-pygame.init()
-largeur, hauteur = carre*len(carte.map[0]), carre*len(carte.map)
-taille_fenetre = (largeur, hauteur)
-screen = pygame.display.set_mode(taille_fenetre)
-pygame.display.set_caption("screen")
-couleur_fond = (0,0,0)
-carte.update_map(0,0)
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-            
-    screen.fill(couleur_fond)
-    carte.draw_map(screen, carte)
-    pygame.display.flip()
-
-    pygame.time.Clock().tick(60)
-    
