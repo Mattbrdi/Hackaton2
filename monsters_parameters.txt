@@ -1,4 +1,4 @@
-goblin = '4' 
+Goblin = '4' 
 JPG    = '5' 
-potion = '10'
-gold = '4' 
+Potion = '10'
+Gold = '4' 
