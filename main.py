@@ -1,6 +1,3 @@
-# Create a main menu for the game rogue using pygame
-# It should have 3 buttons, start, how-to-play, and quit
-
 import pygame
 import sys
 from button import Button
