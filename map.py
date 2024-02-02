@@ -8,7 +8,6 @@ class Map:
                 self.map.append(list(line)[:-1])
         
         self.map_decouverte = [[' ' for _ in range(len(row))] for row in self.map]
-        print(self.map_decouverte)
 
     def draw_map(self, screen):
         for i in range(len(self.map_decouverte)):
@@ -28,9 +27,10 @@ class Map:
 
 carte = Map('map.txt')
 def draw(screen):     
+    carte.update_map(0,0)
     carte.draw_map(screen)
     
-"""
+
 #-----------
 pygame.init()
 largeur, hauteur = 32*len(carte.map[0]), 32*len(carte.map)
@@ -49,4 +49,4 @@ while True:
     carte.draw_map(screen)
     pygame.display.flip()
 
-    pygame.time.Clock().tick(60)"""
+    pygame.time.Clock().tick(60)
