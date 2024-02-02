@@ -91,7 +91,6 @@ class Personnage:
         
     def throw_arrow(self, direction, list_of_arrow):
         position = self.get_position() #tupple
-        direction = self.get_direction()
         list_of_arrow.append(Arrow(position, direction))
 
     def get_score(self, screen):
@@ -104,10 +103,10 @@ class Personnage:
 
 class Arrow:
 
-    def __init__(self, position, direction, damage) -> None:
+    def __init__(self, position, direction) -> None:
         self._direction = direction
         self._position = position
-        self._damage = damage
+        self._damage = 10
 
     def get_damage(self):
         return self._damage
@@ -121,7 +120,6 @@ class Arrow:
     def move(self):
         direction = self.get_direction()
         position = self.get_position()
-        damage = self.get_damage()
         if direction == 'right':
             position = (position[0], position[1]+1)
             return Arrow(position, direction)
@@ -129,17 +127,34 @@ class Arrow:
             position = (position[0], position[1]-1)
             return Arrow(position, direction)
         if direction == 'up':
-            position = (position[0]-1, position[1]+1)
+            position = (position[0]-1, position[1])
             return Arrow(position, direction)
         if direction == 'down':
-            position = (position[0]+1, position[1]+1)
+            position = (position[0]+1, position[1])
             return Arrow(position, direction)
 
-    def is_legit_move(self, map, move):
+    def is_legit_move(self, map):
         direction = self.get_direction()
-        futur_position = move(self, direction).get_position()
+        
+        futur_position = self.get_position()
+
+        if direction == 'right':
+            futur_position = (futur_position[0], futur_position[1]+1)
+        if direction == 'left':
+            futur_position = (futur_position[0], futur_position[1]-1)
+        if direction == 'up':
+            futur_position = (futur_position[0]-1, futur_position[1])
+        if direction == 'down':
+            futur_position = (futur_position[0]+1, futur_position[1])
+
         line = futur_position[0]
         column = futur_position[1]
+
+        if line < 0 or line >= len(map):
+            return False
+        if column < 0 or column >= len(map[0]):
+            return False
+
         if map[line][column] == '.': #room
             return True
         elif map[line][column] == '|': #wall
@@ -153,17 +168,20 @@ class Arrow:
         elif map[line][column] == '-': #wall
             return False
     
-    def make_move(self, map, move):
-        direction = self
+    def make_move(self, map):
+        direction = self.get_direction()
         if self.is_legit_move():
-            return move(self, direction)
+            return self.move(direction)
         return None
     
     def draw(self, screen, l):
-        l_arrow = l/3
+        l_arrow = l
         black = (255, 255, 255)
-        rect = pygame.Rect(self.get_position[1]*l_arrow+l_arrow,self.get_position[0]*l_arrow+l_arrow , l_arrow, l_arrow)
-        pygame.draw.rect(screen, black, rect)
+        direction = self.get_direction()
+        image_path = f"images/arrow-{direction}.png"
+        image = pygame.image.load(image_path)
+        image = pygame.transform.scale(image, (int(l_arrow), int(l_arrow)))
+        screen.blit(image, (self.get_position()[1]*l, self.get_position()[0]*l))
 
     def meet_monster(self, monsters):
         for monster in monsters:

@@ -18,6 +18,8 @@ class Game:
         screen = pygame.display.set_mode(taille_fenetre)
         pygame.display.set_caption("screen")
         couleur_fond = (0,0,0)
+        last_direction = 'right'
+        list_arrow = []
 
         while True:
             direction = None
@@ -36,11 +38,26 @@ class Game:
                         direction = 'right'
                     if event.key == pygame.K_DOWN:
                         direction = 'down'
-
+                    if direction is not None:
+                        last_direction = direction
+                    if event.key == pygame.K_SPACE:
+                        perso.throw_arrow(last_direction, list_arrow)
+            
             perso = perso.make_move(carte.map, direction)
             screen.fill(couleur_fond)
             draw(carte, screen)
             update_display(screen, 32, (255, 0, 0), perso)
+           
+            new_list_arrow = []
+            for arrow in list_arrow:
+                arrow = arrow.move()
+                if arrow.is_legit_move(carte.map):
+                    new_list_arrow.append(arrow)
+            list_arrow = new_list_arrow
+
+            for arrow in list_arrow:
+                arrow.draw(screen, 32)
+
             pygame.display.flip()
             pygame.time.Clock().tick(20)
         
