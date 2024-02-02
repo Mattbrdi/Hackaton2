@@ -17,6 +17,7 @@ class Personnage():
         return self._gold
 
     def move(self, direction):
+        position = self.get_position()
         if direction == 'right':
             position = (position[0], position[1]+1)
             return Personnage(position, self.get_life(), self.get_gold())
@@ -24,16 +25,33 @@ class Personnage():
             position = (position[0], position[1]-1)
             return Personnage(position, self.get_life(), self.get_gold())
         if direction == 'up':
-            position = (position[0]-1, position[1]+1)
+            position = (position[0]-1, position[1])
             return Personnage(position, self.get_life(), self.get_gold())
         if direction == 'down':
-            position = (position[0]+1, position[1]+1)
+            position = (position[0]+1, position[1])
             return Personnage(position, self.get_life(), self.get_gold())
+        return self
     
-    def is_legit_move(self, map, move, direction):
-        futur_position = move(self, direction).get_position()
+    def is_legit_move(self, map, direction):
+        futur_position = self.get_position()
+
+        if direction == 'right':
+            futur_position = (futur_position[0], futur_position[1]+1)
+        if direction == 'left':
+            futur_position = (futur_position[0], futur_position[1]-1)
+        if direction == 'up':
+            futur_position = (futur_position[0]-1, futur_position[1])
+        if direction == 'down':
+            futur_position = (futur_position[0]+1, futur_position[1])
+
         line = futur_position[0]
         column = futur_position[1]
+        # check if line and column is within range
+        if line < 0 or line >= len(map):
+            return False
+        if column < 0 or column >= len(map[0]):
+            return False
+
         if map[line][column] == '.': #room
             return True
         elif map[line][column] == '|': #wall
@@ -47,9 +65,9 @@ class Personnage():
         elif map[line][column] == '-':
             return False
     
-    def make_move(self, map, move, direction):
-        if self.is_legit_move():
-            return move(self, direction)
+    def make_move(self, map, direction):
+        if self.is_legit_move(map, direction):
+            return self.move(direction)
         return self
 
     def hurt(self, damage):
@@ -62,9 +80,11 @@ class Personnage():
         return Personnage(self.get_position(), self.get_life(), self.get_gold()+reward)
     
     def draw(self, screen, l, color):
-        rect = pygame.Rect(self.get_position[1]*l,self.get_position[0]*l , l, l)
-        pygame.draw.rect(screen, color, rect)
-
+        color = (255, 0, 0)
+        rect = pygame.Surface((l, l))
+        rect.fill(color)
+        screen.blit(rect, (self.get_position()[1]*l,self.get_position()[0]*l))
+        
     def attack(): #TODO
         pass
 
@@ -74,8 +94,7 @@ class Personnage():
         text_gold = police.render("Gold: {}".format(self.get_gold()), True, yellow)
         text_life = police.render("Life: {}".format(self.get_life()), True, yellow)
         screen.blit(text_gold, (10, 10))
-        screen.blit(text_life, (50, 10))
-
+        screen.blit(text_life, (100, 10))
 
 def process_events(direction, execute):
     for event in pygame.event.get():
@@ -83,23 +102,10 @@ def process_events(direction, execute):
         if event.type == pygame.QUIT:
             execute = False
         
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_UP and direction != 'down':
-                direction = 'up'
-            if event.key == pygame.K_LEFT and direction != 'right':
-                direction = 'left'
-            if event.key == pygame.K_RIGHT and direction != 'left':
-                direction = 'right'
-            if event.key == pygame.K_DOWN and direction != 'up':
-                direction = 'down'
     return direction, execute
 
-def draw(screen, l, perso_color, perso):
-    draw_map()
-    perso.draw(screen, l, perso_color)
-
-def update_display(screen, l, perso_color, perso, h, w):
-    draw(h, w, screen, l)
+def update_display(screen, l, perso_color, perso):
     perso.get_score(screen)
+    perso.draw(screen, l, perso_color)
     pygame.display.set_caption('Rogue GAME')
     pygame.display.update()

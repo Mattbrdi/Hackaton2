@@ -1,22 +1,47 @@
 # The main algorithm of the game goes here
 import pygame
+from map import Map
+from perso import Personnage, update_display
+import sys
 
 class Game:
-    def __init__(self, settings):
-        """Initialize the game"""
-        self.settings = settings
-        self.screen = settings.screen
-        self.bg_color = settings.bg_color
-        self.caption = settings.caption
-        self.screen_width = settings.screen_width
-        self.screen_height = settings.screen_height
-        self.username = settings.username
-        self.running = True
+    def __init__(self):
+        pass
 
     def run(self):
         """Run the game"""
-        pygame.display.set_caption(self.caption)
-        while self.running:
-            self._check_events()
-            self._update_screen()
+        pygame.init()
+        carte = Map('data/map.txt')
+        perso = Personnage((2,2), 100, 0)
+        largeur, hauteur = 32*len(carte.map[0]), 32*len(carte.map)
+        taille_fenetre = (largeur, hauteur)
+        screen = pygame.display.set_mode(taille_fenetre)
+        pygame.display.set_caption("screen")
+        couleur_fond = (0,0,0)
+        carte.update_map(0,0)
+
+        while True:
+            direction = None
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_UP:
+                        direction = 'up'
+                    if event.key == pygame.K_LEFT:
+                        direction = 'left'
+                    if event.key == pygame.K_RIGHT:
+                        direction = 'right'
+                    if event.key == pygame.K_DOWN:
+                        direction = 'down'
+
+            perso = perso.make_move(carte.map, direction)
+            screen.fill(couleur_fond)
+            carte.draw_map(screen)
+            update_display(screen, 32, (255, 0, 0), perso)
+            pygame.display.flip()
+            pygame.time.Clock().tick(20)
         

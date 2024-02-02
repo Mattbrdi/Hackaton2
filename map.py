@@ -1,5 +1,5 @@
 import pygame
-import sys
+
 class Map:
     def __init__(self, filename):
         self.map = []
@@ -25,13 +25,13 @@ class Map:
                     pygame.draw.rect(screen, (0, 0, 255), (j*32, i*32, 32, 32)) 
     def update_map(self, x, y):
         self.map_decouverte = self.map   
-
+"""
 carte = Map('map.txt')
 def draw(screen):     
     carte.update_map(0,0)  
     carte.draw_map(screen)
     
-"""
+
 #-----------
 pygame.init()
 largeur, hauteur = 32*len(carte.map[0]), 32*len(carte.map)
