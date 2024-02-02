@@ -1,8 +1,5 @@
 import pygame
-import game
-import main
-import perso 
-import sys
+
 
 carre = 32
 class Map:
@@ -71,6 +68,6 @@ def update_map(carte, perso):
     for point in point_a_devoiler(carte, position):
         carte.devoile(point[0], point[1])
 def draw(screen, carte):  
-    carte.update_map(carte, Personnage)  
+    update_map(carte, Personnage)  
     carte.draw_map(screen)
 
