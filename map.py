@@ -22,12 +22,12 @@ class Map:
                     pygame.draw.rect(screen, (255, 255, 0), (j*32, i*32, 32, 32))
                 elif self.map_decouverte[i][j] == '-' or self.map_decouverte[i][j] == '|': 
                     pygame.draw.rect(screen, (0, 0, 255), (j*32, i*32, 32, 32)) 
-    def update_map(self, x, y):
+    def decouvre(self, x, y):
         self.map_decouverte = self.map   
 
 carte = Map('map.txt')
 def draw(screen):     
-    carte.update_map(0,0)
+    carte.decouvre(0,0)  
     carte.draw_map(screen)
     
 
