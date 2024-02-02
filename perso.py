@@ -1,5 +1,5 @@
 import pygame
-import Monstre
+from Monstre import Goblin, JPG
 
 class Personnage:
 
@@ -75,10 +75,10 @@ class Personnage:
         return self
 
     def hurt(self, damage):
-        return Personnage(self.get_position(), self.get_life()-damage)
+        return Personnage(self.get_position(), self.get_life()-damage, self.get_gold())
     
     def heal(self, number):
-        return Personnage(self.get_position, self.get_life()+number)
+        return Personnage(self.get_position, self.get_life()+number, self.get_gold())
 
     def earn_gold(self, reward):
         return Personnage(self.get_position(), self.get_life(), self.get_gold()+reward)
@@ -99,7 +99,7 @@ class Personnage:
         text_gold = police.render("Gold: {}".format(self.get_gold()), True, yellow)
         text_life = police.render("Life: {}".format(self.get_life()), True, yellow)
         screen.blit(text_gold, (10, 10))
-        screen.blit(text_life, (100, 10))
+        screen.blit(text_life, (120, 10))
 
 class Arrow:
 
@@ -167,6 +167,8 @@ class Arrow:
             return True
         elif map[line][column] == '-': #wall
             return False
+        elif isinstance(map[line][column], (Goblin, JPG)):
+            return True
     
     def make_move(self, map):
         direction = self.get_direction()

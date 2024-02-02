@@ -2,6 +2,7 @@
 import pygame
 from map import Map, draw
 from perso import Personnage, update_display
+from Monstre import Goblin, JPG
 import sys
 
 class Game:
@@ -21,7 +22,8 @@ class Game:
         last_direction = 'right'
         list_arrow = []
 
-        while True:
+        running = True
+        while running:
             direction = None
 
             for event in pygame.event.get():
@@ -42,6 +44,16 @@ class Game:
                         last_direction = direction
                     if event.key == pygame.K_SPACE:
                         perso.throw_arrow(last_direction, list_arrow)
+
+            for i in range(len(carte.map)):
+                for j in range(len(carte.map[i])):
+                    if isinstance(carte.map[i][j], (Goblin, JPG)):
+                        perso = perso.hurt(carte.map[i][j].attack(perso))
+                        carte.map[i][j].take_damage(list_arrow)
+                        if (carte.map[i][j].get_life() <= 0):
+                            carte.map[i][j].set_death()
+                            carte.map[i][j] = '.'
+                            perso = perso.earn_gold(10)
             
             perso = perso.make_move(carte.map, direction)
             screen.fill(couleur_fond)
@@ -50,13 +62,22 @@ class Game:
            
             new_list_arrow = []
             for arrow in list_arrow:
-                arrow = arrow.move()
+                x, y = arrow.get_position()
+                if isinstance(carte.map[x][y], (Goblin, JPG)):
+                    continue
                 if arrow.is_legit_move(carte.map):
-                    new_list_arrow.append(arrow)
+                    new_list_arrow.append(arrow.move())
             list_arrow = new_list_arrow
 
             for arrow in list_arrow:
                 arrow.draw(screen, 32)
+            
+            """
+            if perso.get_life() <= 0:
+                images = pygame.image.load('images/game_over.jpeg')
+                screen.blit(images, (-60,0))
+                running = False
+            """
 
             pygame.display.flip()
             pygame.time.Clock().tick(20)
