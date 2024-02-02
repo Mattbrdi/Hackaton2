@@ -1,7 +1,9 @@
 import pygame
-
-
 carre = 32
+wall_image = pygame.image.load('images/murs.jpeg')
+wall_image = pygame.transform.scale(wall_image, (carre, carre))
+
+
 class Map:
     def __init__(self, filename):
         self.map = []
@@ -22,9 +24,10 @@ class Map:
                 elif self.map_decouverte[i][j] == '#':
                     pygame.draw.rect(screen, (100, 100, 100), (j*carre, i*carre, carre, carre))
                 elif self.map_decouverte[i][j] == '+':
-                    pygame.draw.rect(screen, (255, 255, 0), (j*carre, i*carre, carre, carre))
+                    pygame.draw.rect(screen, (255,100,100), (j*carre, i*carre, carre, carre))
                 elif self.map_decouverte[i][j] == '-' or self.map_decouverte[i][j] == '|': 
                     pygame.draw.rect(screen, (0, 0, 255), (j*carre, i*carre, carre, carre)) 
+                    #screen.blit(wall_image, (i*32, j*32))
     def decouvre(self, x, y):
         self.map_decouverte[x][y] = self.map[x][y]   
     def cache(self, x, y):
@@ -65,7 +68,9 @@ def point_a_devoiler(carte, position): #position en (ligne, colonne)
 def update_map(carte, perso):
     position = perso.get_position()
     for point in point_a_devoiler(carte, position):
+        
         carte.decouvre(point[0], point[1])
+        
 def draw(screen, carte, perso):  
     update_map(carte, perso)  
     carte.draw_map(screen)
