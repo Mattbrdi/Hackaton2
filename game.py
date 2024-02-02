@@ -39,8 +39,8 @@ class Game:
 
             perso = perso.make_move(carte.map, direction)
             screen.fill(couleur_fond)
-            draw(carte, screen)
+            draw(screen, carte, perso)
             update_display(screen, 32, (255, 0, 0), perso)
             pygame.display.flip()
             pygame.time.Clock().tick(20)
-        
+    

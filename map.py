@@ -1,7 +1,5 @@
 import pygame
-import main
-import perso 
-import sys
+
 
 carre = 32
 class Map:
@@ -28,7 +26,7 @@ class Map:
                 elif self.map_decouverte[i][j] == '-' or self.map_decouverte[i][j] == '|': 
                     pygame.draw.rect(screen, (0, 0, 255), (j*carre, i*carre, carre, carre)) 
     def decouvre(self, x, y):
-        self.map_decouverte = self.map   
+        self.map_decouverte[x][y] = self.map[x][y]   
     def cache(self, x, y):
         self.map_decouverte[x][y] = ' '
 
@@ -36,16 +34,16 @@ class Map:
 
     
 def point_with_caractere_next_to(carte, position, caractere):
-    points = [] 
+    list_points = [position] 
     if carte.map[position[0]-1][position[1]] == caractere:
-        points.append ((position[0]-1, position[1]))
+        list_points.append((position[0]-1, position[1]))
     if carte.map[position[0]+1][position[1]] == caractere :
-        points.append ((position[0]+1, position[1]))
+        list_points.append((position[0]+1, position[1]))
     if carte.map[position[0]][position[1]-1] == caractere :
-        points.append ((position[0], position[1]-1))
+        list_points.append((position[0], position[1]-1))
     if carte.map[position[0]][position[1]+1] == caractere:
-        return points.append((position[0], position[1]+1))
-    return points
+        list_points.append((position[0], position[1]+1))
+    return list_points
 
 def point_a_devoiler(carte, position): #position en (ligne, colonne)
     point_a_devoiler = []
@@ -58,7 +56,7 @@ def point_a_devoiler(carte, position): #position en (ligne, colonne)
             a= file.pop(0)
             point_a_devoiler.append(a)
                   
-    if carte.map[position[0]][position[1]] == '#':
+    else:
         point_a_devoiler.append((position[0]+1, position[1]))
         point_a_devoiler.append((position[0]-1, position[1]))
         point_a_devoiler.append((position[0], position[1]+1))
@@ -68,8 +66,9 @@ def point_a_devoiler(carte, position): #position en (ligne, colonne)
 def update_map(carte, perso):
     position = perso.get_position()
     for point in point_a_devoiler(carte, position):
-        carte.devoile(point[0], point[1])
-def draw(screen, carte):  
-    carte.update_map(carte, Personnage)  
+        carte.decouvre(point[0], point[1])
+        print(point)
+def draw(screen, carte, perso):  
+    update_map(carte, perso)  
     carte.draw_map(screen)
 
