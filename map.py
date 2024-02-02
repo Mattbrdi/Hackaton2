@@ -8,7 +8,6 @@ class Map:
                 self.map.append(list(line)[:-1])
         
         self.map_decouverte = [[' ' for _ in range(len(row))] for row in self.map]
-        print(self.map_decouverte)
 
     def draw_map(self, screen):
         for i in range(len(self.map_decouverte)):
@@ -23,12 +22,12 @@ class Map:
                     pygame.draw.rect(screen, (255, 255, 0), (j*32, i*32, 32, 32))
                 elif self.map_decouverte[i][j] == '-' or self.map_decouverte[i][j] == '|': 
                     pygame.draw.rect(screen, (0, 0, 255), (j*32, i*32, 32, 32)) 
-    def update_map(self, x, y):
+    def decouvre(self, x, y):
         self.map_decouverte = self.map   
 
 carte = Map('map.txt')
 def draw(screen):     
-    carte.update_map(0,0)  
+    carte.decouvre(0,0)  
     carte.draw_map(screen)
     
 """
