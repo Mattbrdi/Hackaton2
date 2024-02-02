@@ -18,7 +18,6 @@ class Game:
         screen = pygame.display.set_mode(taille_fenetre)
         pygame.display.set_caption("screen")
         couleur_fond = (0,0,0)
-        carte.update_map(0,0)
 
         while True:
             direction = None
