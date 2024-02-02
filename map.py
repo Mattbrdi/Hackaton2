@@ -56,18 +56,16 @@ def point_a_devoiler(carte, position): #position en (ligne, colonne)
             a= file.pop(0)
             point_a_devoiler.append(a)
                   
-    else:
-        point_a_devoiler.append((position[0]+1, position[1]))
-        point_a_devoiler.append((position[0]-1, position[1]))
-        point_a_devoiler.append((position[0], position[1]+1))
-        point_a_devoiler.append((position[0], position[1]-1))
+    point_a_devoiler.append((position[0]+1, position[1]))
+    point_a_devoiler.append((position[0]-1, position[1]))
+    point_a_devoiler.append((position[0], position[1]+1))
+    point_a_devoiler.append((position[0], position[1]-1))
     return point_a_devoiler
   
 def update_map(carte, perso):
     position = perso.get_position()
     for point in point_a_devoiler(carte, position):
         carte.decouvre(point[0], point[1])
-        print(point)
 def draw(screen, carte, perso):  
     update_map(carte, perso)  
     carte.draw_map(screen)
