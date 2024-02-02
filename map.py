@@ -28,6 +28,7 @@ class Map:
 
 carte = Map('map.txt')
 def draw(screen):     
+    carte.update_map(0,0)  
     carte.draw_map(screen)
     
 """
