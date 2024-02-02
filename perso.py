@@ -1,4 +1,5 @@
 import pygame
+import Monstre
 
 class Personnage:
 
@@ -148,6 +149,11 @@ class Arrow:
         rect = pygame.Rect(self.get_position[1]*l_arrow+l_arrow,self.get_position[0]*l_arrow+l_arrow , l_arrow, l_arrow)
         pygame.draw.rect(screen, black, rect)
 
+    def meet_monster(self, monsters):
+        for monster in monsters:
+            if monster.get_position() == self.get_position():
+                return None #we met a monster
+        return self #we did not met a monster
 
 
 def process_events(direction, execute, perso):
@@ -177,9 +183,9 @@ def draw_all(screen, l, perso_color, perso, list_arrow):
     for arrow in list_arrow:
         arrow.draw(screen, l)
 
-def move_all_arrows(list_of_arrow):
+def move_all_arrows(list_of_arrows):
     list = []
-    for arrow in list_of_arrow:
+    for arrow in list_of_arrows:
         arrow = arrow.make_move()
         if arrow is not None:
             list.append(arrow)
