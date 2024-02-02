@@ -1,0 +1,4 @@
+goblin = '4' 
+JPG    = '5' 
+potion = '10'
+gold = '4' 
